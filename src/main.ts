@@ -10,7 +10,9 @@ import Invection from "./classes/Invection";
 
 //vaccinated
 
-let world = new World(500,500,100);
+console.log("start");
+
+let world = new World(700,700,700);
 let invection = new Invection(1,1,1,1);
 
 
