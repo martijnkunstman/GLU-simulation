@@ -1,11 +1,12 @@
-import World from "./World";
+import World from "./World"
+import Invection from "./Invection"
 
 export default class Simulation {
 
     public world : World
 
-    public constructor() {
-        this.world = new World(500,500,100)
+    public constructor(world: World, invection: Invection) {
+        this.world = world
     }
 
 }

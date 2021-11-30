@@ -1,4 +1,6 @@
 import Simulation from "./classes/Simulation";
+import World from "./classes/World";
+import Invection from "./classes/Invection";
 
 //SIR
 
@@ -8,6 +10,10 @@ import Simulation from "./classes/Simulation";
 
 //vaccinated
 
-let simulation: Simulation = new Simulation();
+let world = new World(500,500,100);
+let invection = new Invection(1,1,1,1);
+
+
+let simulation: Simulation = new Simulation(world, invection);
 
 

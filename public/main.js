@@ -30,6 +30,16 @@ eval("\r\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\r\n
 
 /***/ }),
 
+/***/ "./src/classes/Invection.ts":
+/*!**********************************!*\
+  !*** ./src/classes/Invection.ts ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+eval("\r\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\r\nvar Invection = /** @class */ (function () {\r\n    function Invection(duration, mortality, contagiousness, transmittability) {\r\n        this.duration = duration;\r\n        this.mortality = mortality;\r\n        this.contagiousness = contagiousness;\r\n        this.transmittability = transmittability;\r\n    }\r\n    return Invection;\r\n}());\r\nexports[\"default\"] = Invection;\r\n\n\n//# sourceURL=webpack://glu-simulation/./src/classes/Invection.ts?");
+
+/***/ }),
+
 /***/ "./src/classes/Location.ts":
 /*!*********************************!*\
   !*** ./src/classes/Location.ts ***!
@@ -44,9 +54,9 @@ eval("\r\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\r\n
 /*!***********************************!*\
   !*** ./src/classes/Simulation.ts ***!
   \***********************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports) => {
 
-eval("\r\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\r\nvar World_1 = __webpack_require__(/*! ./World */ \"./src/classes/World.ts\");\r\nvar Simulation = /** @class */ (function () {\r\n    function Simulation() {\r\n        this.world = new World_1.default(500, 500, 100);\r\n    }\r\n    return Simulation;\r\n}());\r\nexports[\"default\"] = Simulation;\r\n\n\n//# sourceURL=webpack://glu-simulation/./src/classes/Simulation.ts?");
+eval("\r\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\r\nvar Simulation = /** @class */ (function () {\r\n    function Simulation(world, invection) {\r\n        this.world = world;\r\n    }\r\n    return Simulation;\r\n}());\r\nexports[\"default\"] = Simulation;\r\n\n\n//# sourceURL=webpack://glu-simulation/./src/classes/Simulation.ts?");
 
 /***/ }),
 
@@ -66,7 +76,7 @@ eval("\r\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\r\n
   \*********************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-eval("\r\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\r\nvar Simulation_1 = __webpack_require__(/*! ./classes/Simulation */ \"./src/classes/Simulation.ts\");\r\n//SIR\r\n//susceptible\r\n//infectious\r\n//recovered / removed\r\n//vaccinated\r\nvar simulation = new Simulation_1.default();\r\n\n\n//# sourceURL=webpack://glu-simulation/./src/main.ts?");
+eval("\r\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\r\nvar Simulation_1 = __webpack_require__(/*! ./classes/Simulation */ \"./src/classes/Simulation.ts\");\r\nvar World_1 = __webpack_require__(/*! ./classes/World */ \"./src/classes/World.ts\");\r\nvar Invection_1 = __webpack_require__(/*! ./classes/Invection */ \"./src/classes/Invection.ts\");\r\n//SIR\r\n//susceptible\r\n//infectious\r\n//recovered / removed\r\n//vaccinated\r\nvar world = new World_1.default(500, 500, 100);\r\nvar invection = new Invection_1.default(1, 1, 1, 1);\r\nvar simulation = new Simulation_1.default(world, invection);\r\n\n\n//# sourceURL=webpack://glu-simulation/./src/main.ts?");
 
 /***/ })
 
