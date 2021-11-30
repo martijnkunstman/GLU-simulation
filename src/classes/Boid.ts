@@ -7,7 +7,7 @@ export default class Boid {
     public direction: Vector;
     public bounds: Vector;
     public invection: Invection;
-    public radius: number = 3;
+    public radius: number = 5;
     public overlap: boolean = false;
     public checked: boolean = false;
     public util: Util = new Util();
