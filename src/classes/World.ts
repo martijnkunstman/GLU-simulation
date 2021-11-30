@@ -13,9 +13,7 @@ export default class World {
 
     public time: number = 0;
 
-    public util: Util = new Util()
-
-    public constructor(width: number, height: number, initialBoids: number) {
+    public constructor(width: number, height: number, density: number) {
         this.width = width;
         this.height = height;
         this.canvas = document.createElement('canvas')
@@ -23,9 +21,9 @@ export default class World {
         this.canvas.setAttribute("height", this.height.toString())
         document.body.appendChild(this.canvas);
         this.ctx = this.canvas.getContext("2d")
-        this.initialBoids = initialBoids;
+        this.initialBoids = this.width*this.height*density;
         for (let a: number = 0; a < this.initialBoids; a++) {
-            let location = new Vector(this.util.randomBetween(0, width), this.util.randomBetween(0, height))
+            let location = new Vector(Util.randomBetween(0, width), Util.randomBetween(0, height))
             let bounds = new Vector(this.width, this.height)
             let boid = new Boid(location, bounds, a)
             this.boids.push(boid)

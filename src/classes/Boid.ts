@@ -10,7 +10,6 @@ export default class Boid {
     public radius: number = 5;
     public overlap: boolean = false;
     public checked: boolean = false;
-    public util: Util = new Util();
     public id: number;
 
     public constructor(location: Vector, bounds: Vector, id: number, invection: Invection = new Invection()) {
@@ -18,29 +17,8 @@ export default class Boid {
         this.location = location;
         this.bounds = bounds;
         this.id = id;
-        this.direction = new Vector(this.util.randomBetween(-2, 2), this.util.randomBetween(-2, 2))
-    }
-
-    /*
-    public checkOverlap(boids: Array<Boid>):boolean {    
-        if (this.checked) {
-            return true;
-        }
-        for (let i: number = 0; i < boids.length; i++) {
-            console.log(boids[i].id);
-            if (this.id != boids[i].id) {
-                if (this.location.distance(boids[i].location) < this.radius * 2) {
-                    this.overlap = true;
-                    this.checked = true;
-                    //boids[i].overlap = true;
-                    boids[i].checked = true;
-                }
-            }            
-        }
-        this.checked = true; 
-        return true;  
-    }
-    */
+        this.direction = new Vector(Util.randomBetween(-2, 2), Util.randomBetween(-2, 2))
+    }   
 
     public render(ctx: CanvasRenderingContext2D) {
         this.location.x = this.location.x + this.direction.x

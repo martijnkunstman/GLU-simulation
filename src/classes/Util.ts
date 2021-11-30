@@ -1,7 +1,14 @@
 export default class Util {
 
-    public randomBetween(a: number, b: number) {
-        return Math.floor(Math.random() * (b - a + 1) + a);
-    };
+    private static seed: number = 123456 % 2147483647
+
+    private static random(): number {
+        this.seed = this.seed * 16807 % 2147483647
+        return (this.seed - 1) / 2147483646
+    }
+
+    public static randomBetween(a: number, b: number) {
+        return Math.floor(this.random() * (b - a + 1) + a)
+    }
 
 }

@@ -12,7 +12,7 @@ import Invection from "./classes/Invection";
 
 console.log("start");
 
-let world = new World(700,700,600);
+let world = new World(700,700,0.001);
 let invection = new Invection(1,1,1,1);
 
 
