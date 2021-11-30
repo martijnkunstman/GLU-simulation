@@ -1,6 +1,7 @@
 import Util from "./Util";
 import Vector from "./Vector";
 import Boid from "./Boid";
+import Invection from "./Invection";
 
 export default class World {
     public width: number
@@ -13,7 +14,7 @@ export default class World {
 
     public time: number = 0;
 
-    public constructor(width: number, height: number, density: number) {
+    public constructor(width: number, height: number, density: number, infections: number, invection: Invection) {
         this.width = width;
         this.height = height;
         this.canvas = document.createElement('canvas')
@@ -25,7 +26,9 @@ export default class World {
         for (let a: number = 0; a < this.initialBoids; a++) {
             let location = new Vector(Util.randomBetween(0, width), Util.randomBetween(0, height))
             let bounds = new Vector(this.width, this.height)
-            let boid = new Boid(location, bounds, a)
+            let infected
+            a<infections ? infected = 1 : infected = 0
+            let boid = new Boid(location, bounds, a, invection, infected)
             this.boids.push(boid)
         }
         this.cycle();
@@ -44,11 +47,11 @@ export default class World {
 
     public checkOverlap() {
 
-        this.boids.map(boid => { boid.overlap = false; boid.checked = false })
+        this.boids.map(boid => boid.reset())
 
         let counter:number = 1;
         for (let i: number = 0; i < this.boids.length; i++) {
-            if (!this.boids[i].checked) {
+            //if (!this.boids[i].checked) {
                 for (let ii: number = counter; ii < this.boids.length; ii++) {
                     if (this.boids[i].id != this.boids[ii].id) {
                         if (this.boids[i].location.distance(this.boids[ii].location) < this.boids[i].radius + this.boids[ii].radius) {
@@ -56,18 +59,26 @@ export default class World {
                             this.boids[ii].overlap = true;
                             this.boids[i].checked = true;
                             this.boids[ii].checked = true;
-                            break;
+                            //break;
+                            if (this.boids[i].state == 1)
+                            {
+                                this.boids[ii].gotIt = true
+                            }
+                            if (this.boids[ii].state == 1)
+                            {
+                                this.boids[i].gotIt = true
+                            }
                         }
                     }
                     this.boids[i].checked = true;
                 }
-            }
+            //}
             counter++;
         }
     }
 
-    public render(fps: number) {
-        this.ctx.fillStyle = "#00FF00";
+    public render(fps: number) {     
+        this.ctx.fillStyle = "#eeeeee";
         this.ctx.fillRect(0, 0, this.width, this.height);
         this.ctx.font = "30px Arial";
         this.boids.map(boid => boid.render(this.ctx));

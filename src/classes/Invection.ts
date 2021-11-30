@@ -5,7 +5,7 @@ export default class Invection {
     public contagiousness:number; //change of spreading withing the duration of the inverction
     public transmittability:number //distance the invection will be able to spread
 
-    public constructor(duration:number = 1, mortality:number = 1, contagiousness:number = 1, transmittability:number = 1) {
+    public constructor(duration:number, mortality:number, contagiousness:number, transmittability:number) {
         this.duration = duration
         this.mortality = mortality
         this.contagiousness = contagiousness
