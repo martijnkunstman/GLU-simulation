@@ -32,6 +32,20 @@ let ctx = canvas.getContext("2d")
 
 let graphData: Array<{ [key: string]: number }> = [];
 
+function convertArrayLenght(inputArray: Array<number>, length: number): Array<number> {
+
+    if (inputArray.length < length) {
+        return inputArray;
+    }
+
+    let myNewArray: Array<number> = []
+    for (let a: number = 0; a < length; a++) {
+        let value
+        myNewArray.push(value)
+    }
+    return myNewArray
+}
+
 const chart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -143,7 +157,7 @@ function updateChart() {
     }
 }
 
-setInterval(updateChart, 500);
+setInterval(updateChart, 250);
 
 
 
