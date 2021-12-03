@@ -135,8 +135,10 @@ export default class Boid {
         }
 
         if (this.state == State.Infectious) {
+            
+            let lineWIdth = Math.sin(this.infectionDuration/this.invection.duration*Math.PI)*20;
             ctx.strokeStyle = "rgba(255,0,0,0.4)";
-            ctx.lineWidth = 12;
+            ctx.lineWidth = lineWIdth;
         }
 
         ctx.beginPath();
