@@ -2,7 +2,7 @@ export default class Util {
 
     private static seed: number = 123456 % 2147483647
 
-    private static random(): number {
+    public static random(): number {
         this.seed = this.seed * 16807 % 2147483647
         return (this.seed - 1) / 2147483646
     }

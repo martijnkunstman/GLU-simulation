@@ -19,12 +19,12 @@ document.body.style.display = "flex";
 
 console.log("start");
 let invection = new Invection(100, 0.5, 0.5, 10);
-let world = new World(500, 500, 0.001, 10, invection);
+let world = new World(700, 700, 0.0008, 10, invection);
 let simulation: Simulation = new Simulation(world);
 
 let canvas = document.createElement('canvas')
-canvas.setAttribute("width", "500")
-canvas.setAttribute("height", "500")
+canvas.setAttribute("width", "700")
+canvas.setAttribute("height", "700")
 document.body.appendChild(canvas);
 let ctx = canvas.getContext("2d")
 

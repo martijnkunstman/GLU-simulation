@@ -54,7 +54,7 @@ export default class World {
             //if (!this.boids[i].checked) {
                 for (let ii: number = counter; ii < this.boids.length; ii++) {
                     if (this.boids[i].id != this.boids[ii].id) {
-                        if (this.boids[i].location.distance(this.boids[ii].location) < this.boids[i].radius + this.boids[ii].radius) {
+                        if (this.boids[i].location.distance(this.boids[ii].location) < this.boids[i].radius + this.boids[ii].radius + 5) {
                             this.boids[i].overlap = true;
                             this.boids[ii].overlap = true;
                             this.boids[i].checked = true;
@@ -78,10 +78,10 @@ export default class World {
     }
 
     public render(fps: number) {     
-        this.ctx.fillStyle = "#eeeeee";
+        this.ctx.fillStyle = "#dddddd";
         this.ctx.fillRect(0, 0, this.width, this.height);
         this.ctx.font = "30px Arial";
-        this.boids.map(boid => boid.render(this.ctx));
+        this.boids.map(boid => boid.cycle(this.ctx, this.boids));
         this.ctx.fillText(fps.toString(), 50, 50);
     }
 }
