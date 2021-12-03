@@ -61,6 +61,9 @@ export default class Boid {
 
 
     private separate(boids: Array<Boid>) {
+
+        //use multi hash map for performance
+
         //affect direction, based on forces of nearby
         let startSeperationAtDistance = this.startSeperationAtDistance;
         for (let i: number = 0; i < boids.length; i++) {
