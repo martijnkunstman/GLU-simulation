@@ -20,18 +20,20 @@ export default class Boid {
     public id: number;
     public state: State; //temp
     public gotIt: boolean = false; //temp
+    public startSeperationAtDistance: number;
 
     private speed = 1;
     private infectionDuration: number = 0;
 
     private _tempCounter = 0;
 
-    public constructor(location: Vector, bounds: Vector, id: number, invection: Invection, state: State) {
+    public constructor(location: Vector, bounds: Vector, id: number, invection: Invection, state: State, startSeperationAtDistance: number) {
         this.invection = invection;
         this.location = location;
         this.bounds = bounds;
         this.id = id;
         this.state = state;
+        this.startSeperationAtDistance = startSeperationAtDistance;
         //this.direction = new Vector(Util.randomBetween(-this.speed, this.speed), Util.randomBetween(-this.speed, this.speed))
         this.direction = new Vector(Util.random()-0.5, Util.random()-0.5)
     
@@ -60,7 +62,7 @@ export default class Boid {
 
     private separate(boids: Array<Boid>) {
         //affect direction, based on forces of nearby
-        let startSeperationAtDistance = 20;
+        let startSeperationAtDistance = this.startSeperationAtDistance;
         for (let i: number = 0; i < boids.length; i++) {
             if (this.id != boids[i].id) {
                 let distanceBetween = this.location.distance(boids[i].location);
@@ -96,7 +98,7 @@ export default class Boid {
         */
 
         //stay away from border
-        let startSeperationAtDistance = 20;
+        let startSeperationAtDistance = this.startSeperationAtDistance;
         if (this.location.x < startSeperationAtDistance) {
             this.direction.x = this.direction.x + (startSeperationAtDistance - this.location.x) / startSeperationAtDistance;
          }

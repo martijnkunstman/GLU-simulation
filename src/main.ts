@@ -1,11 +1,32 @@
 import Simulation from "./classes/Simulation";
 import World from "./classes/World";
 import Invection from "./classes/Invection";
-//import { Chart, registerables } from 'chart.js';
-//Chart.register(...registerables);
-
 import Chart from 'chart.js/auto';
-import { getRelativePosition } from 'chart.js/helpers';
+//import { getRelativePosition } from 'chart.js/helpers';
+import { Pane } from 'tweakpane';
+
+const PARAMS = {
+    density: 0.0006,
+    seperation: 15
+};
+
+const pane: Pane = new Pane();
+
+pane.addInput(
+    PARAMS, 'density',
+    { min: 0.0001, max: 0.0012, step: 0.0001 }
+).on('change', (ev: any): void => {
+    graphData = [];
+    world.resetDensity(ev.value);
+});
+pane.addInput(
+    PARAMS, 'seperation',
+    { min: 0, max: 30, step: 1 }
+).on('change', (ev) => {
+    graphData = [];
+    world.resetSeperation(ev.value);
+});
+
 
 document.body.style.display = "flex";
 
@@ -19,7 +40,7 @@ document.body.style.display = "flex";
 
 console.log("start");
 let invection = new Invection(100, 0.5, 0.5, 10);
-let world = new World(700, 700, 0.0008, 10, invection);
+let world = new World(700, 700, PARAMS.density, 10, invection, PARAMS.seperation);
 let simulation: Simulation = new Simulation(world);
 
 let canvas = document.createElement('canvas')
