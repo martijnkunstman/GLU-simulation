@@ -30,7 +30,7 @@ export default class Boid {
 
     private graphic;
 
-    public constructor(location: Vector, bounds: Vector, id: number, invection: Invection, state: State, startSeperationAtDistance: number, pixie) {
+    public constructor(location: Vector, bounds: Vector, id: number, invection: Invection, state: State, startSeperationAtDistance: number, pixi) {
         this.invection = invection;
         this.location = location;
         this.bounds = bounds;
@@ -45,7 +45,7 @@ export default class Boid {
         this.graphic.endFill();
         this.graphic.x = this.location.x;
         this.graphic.y = this.location.y;
-        pixie.stage.addChild(this.graphic)
+        pixi.addChild(this.graphic)
     
     }
 

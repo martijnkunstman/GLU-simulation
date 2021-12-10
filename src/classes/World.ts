@@ -16,7 +16,8 @@ export default class World {
     public infections: number;
     public startSeperationAtDistance: number;
 
-    public pixie;
+    public pixi;
+    public container;
 
     private fps: number;
 
@@ -24,12 +25,15 @@ export default class World {
     public times: Array<number> = [];
 
     public constructor(width: number, height: number, density: number, infections: number, invection: Invection, startSeperationAtDistance: number) {
-        this.pixie = new PIXI.Application({
+        this.pixi = new PIXI.Application({
             width: width,
             height: height,
             backgroundColor: 0x2c3e50
         });
-        document.body.appendChild(this.pixie.view);
+        document.body.appendChild(this.pixi.view);
+
+        this.container = new PIXI.Container();
+        this.pixi.stage.addChild(this.container);
 
         this.width = width;
         this.height = height;
@@ -50,13 +54,14 @@ export default class World {
             let bounds = new Vector(this.width, this.height)
             let infected
             a < this.infections ? infected = 1 : infected = 0
-            let boid = new Boid(location, bounds, a, invection, infected, startSeperationAtDistance, this.pixie)
+            let boid = new Boid(location, bounds, a, invection, infected, startSeperationAtDistance, this.container)
             this.boids.push(boid)
         }
         this.cycle();
     }
 
     public resetDensity(density: number) {
+        this.container.removeChildren();
         this.initialBoids = this.width * this.height * density;
         this.boids = [];
         for (let a: number = 0; a < this.initialBoids; a++) {
@@ -64,12 +69,13 @@ export default class World {
             let bounds = new Vector(this.width, this.height)
             let infected
             a < this.infections ? infected = 1 : infected = 0
-            let boid = new Boid(location, bounds, a, this.invection, infected, this.startSeperationAtDistance, this.pixie)
+            let boid = new Boid(location, bounds, a, this.invection, infected, this.startSeperationAtDistance, this.container)
             this.boids.push(boid)
         }
     }
 
     public resetSeperation(startSeperationAtDistance: number) {
+        this.container.removeChildren();
         this.startSeperationAtDistance = startSeperationAtDistance
         this.boids = [];
         for (let a: number = 0; a < this.initialBoids; a++) {
@@ -77,7 +83,7 @@ export default class World {
             let bounds = new Vector(this.width, this.height)
             let infected
             a < this.infections ? infected = 1 : infected = 0
-            let boid = new Boid(location, bounds, a, this.invection, infected, this.startSeperationAtDistance, this.pixie)
+            let boid = new Boid(location, bounds, a, this.invection, infected, this.startSeperationAtDistance, this.container)
             this.boids.push(boid)
         }
     }
