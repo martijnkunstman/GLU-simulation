@@ -1,6 +1,7 @@
 import Vector from "./Vector";
 import Invection from "./Invection";
 import Util from "./Util";
+import * as PIXI from 'pixi.js'
 
 enum State {
     Susceptible = 0,
@@ -27,15 +28,24 @@ export default class Boid {
 
     private _tempCounter = 0;
 
-    public constructor(location: Vector, bounds: Vector, id: number, invection: Invection, state: State, startSeperationAtDistance: number) {
+    private graphic;
+
+    public constructor(location: Vector, bounds: Vector, id: number, invection: Invection, state: State, startSeperationAtDistance: number, pixie) {
         this.invection = invection;
         this.location = location;
         this.bounds = bounds;
         this.id = id;
         this.state = state;
         this.startSeperationAtDistance = startSeperationAtDistance;
-        //this.direction = new Vector(Util.randomBetween(-this.speed, this.speed), Util.randomBetween(-this.speed, this.speed))
-        this.direction = new Vector(Util.random()-0.5, Util.random()-0.5)
+        this.direction = new Vector((Util.random()-0.5)*this.speed, (Util.random()-0.5)*this.speed)
+
+        this.graphic = new PIXI.Graphics();
+        this.graphic.beginFill(0xffffff);
+        this.graphic.drawCircle(0,0, this.radius);
+        this.graphic.endFill();
+        this.graphic.x = this.location.x;
+        this.graphic.y = this.location.y;
+        pixie.stage.addChild(this.graphic)
     
     }
 
@@ -132,6 +142,7 @@ export default class Boid {
 
 
     private render(ctx: CanvasRenderingContext2D) {
+        /*
         ctx.strokeStyle = "black";
         ctx.lineWidth = 1;
         if (this.overlap) {
@@ -147,19 +158,26 @@ export default class Boid {
         }
 
         ctx.beginPath();
-        ctx.arc(this.location.x, this.location.y, this.radius, 0, 2 * Math.PI);
+        //ctx.arc(this.location.x, this.location.y, this.radius, 0, 2 * Math.PI);
         ctx.stroke();
+        */
 
-        let color = "#ffffff";
+        let color = 0xffffff;
 
         if (this.state == State.Infectious) {
-            color = "red";
+            color = 0xff0000;
         }
         if (this.state == State.Recovered) {
-            color = "#bbbbbb";
+            color = 0xbbbbbb;
         }
+        /*
 
         ctx.fillStyle = color;
         ctx.fill();
+        */
+       this.graphic.tint = color;
+       this.graphic.x = this.location.x;
+       this.graphic.y = this.location.y;
+
     }
 }

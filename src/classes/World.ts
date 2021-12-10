@@ -2,6 +2,7 @@ import Util from "./Util";
 import Vector from "./Vector";
 import Boid from "./Boid";
 import Invection from "./Invection";
+import * as PIXI from 'pixi.js'
 
 export default class World {
     public width: number
@@ -15,20 +16,32 @@ export default class World {
     public infections: number;
     public startSeperationAtDistance: number;
 
+    public pixie;
+
     private fps: number;
 
     public time: number = 0;
     public times: Array<number> = [];
 
     public constructor(width: number, height: number, density: number, infections: number, invection: Invection, startSeperationAtDistance: number) {
+        this.pixie = new PIXI.Application({
+            width: width,
+            height: height,
+            backgroundColor: 0x2c3e50
+        });
+        document.body.appendChild(this.pixie.view);
+
         this.width = width;
         this.height = height;
+        /*
         this.canvas = document.createElement('canvas')
         this.canvas.id = "world"
         this.canvas.setAttribute("width", this.width.toString())
         this.canvas.setAttribute("height", this.height.toString())
         document.body.appendChild(this.canvas);
         this.ctx = this.canvas.getContext("2d")
+        */
+        
         this.initialBoids = this.width * this.height * density;
         this.invection = invection;
         this.infections = infections;
@@ -37,7 +50,7 @@ export default class World {
             let bounds = new Vector(this.width, this.height)
             let infected
             a < this.infections ? infected = 1 : infected = 0
-            let boid = new Boid(location, bounds, a, invection, infected, startSeperationAtDistance)
+            let boid = new Boid(location, bounds, a, invection, infected, startSeperationAtDistance, this.pixie)
             this.boids.push(boid)
         }
         this.cycle();
@@ -51,7 +64,7 @@ export default class World {
             let bounds = new Vector(this.width, this.height)
             let infected
             a < this.infections ? infected = 1 : infected = 0
-            let boid = new Boid(location, bounds, a, this.invection, infected, this.startSeperationAtDistance)
+            let boid = new Boid(location, bounds, a, this.invection, infected, this.startSeperationAtDistance, this.pixie)
             this.boids.push(boid)
         }
     }
@@ -64,7 +77,7 @@ export default class World {
             let bounds = new Vector(this.width, this.height)
             let infected
             a < this.infections ? infected = 1 : infected = 0
-            let boid = new Boid(location, bounds, a, this.invection, infected, this.startSeperationAtDistance)
+            let boid = new Boid(location, bounds, a, this.invection, infected, this.startSeperationAtDistance, this.pixie)
             this.boids.push(boid)
         }
     }
@@ -112,13 +125,18 @@ export default class World {
         }
     }
 
-   
+
     public render(fps: number) {
+        /*
         this.ctx.fillStyle = "#dddddd";
         this.ctx.fillRect(0, 0, this.width, this.height);
         this.ctx.font = "30px Arial";
+        */
+        
         this.boids.map(boid => boid.cycle(this.ctx, this.boids));
+        /*
         this.ctx.fillStyle = "black";
         this.ctx.fillText(fps.toString(), 50, 50);
+        */
     }
 }
