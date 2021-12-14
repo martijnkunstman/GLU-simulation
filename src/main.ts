@@ -15,7 +15,7 @@ const pane: Pane = new Pane();
 pane.addInput(
     PARAMS, 'density',
     { min: 0.001, max: 0.002, step: 0.0001 }
-).on('change', (ev: any): void => {
+).on('change', (ev): void => {
     graphData = [];
     world.resetDensity(ev.value);
 });

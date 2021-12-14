@@ -134,7 +134,7 @@ export default class Boid {
 
     public cycle(ctx: CanvasRenderingContext2D, boids: Array<Boid>) {
         this.updateInfection();
-        this.separate(boids);
+        //this.separate(boids);
         this.updateLocation();
         this.render(ctx);
     }

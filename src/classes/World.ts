@@ -1,10 +1,11 @@
-import Util from "./Util";
-import Vector from "./Vector";
-import Boid from "./Boid";
-import Infection from "./Infection";
-import QuadTree from "./QuadTree";
+import Util from "./Util"
+import Vector from "./Vector"
+import Boid from "./Boid"
+import Infection from "./Infection"
+import QuadTree from "./QuadTree"
 import * as PIXI from 'pixi.js'
-import Rectangle from "./Rectangle";
+import Rectangle from "./Rectangle"
+//import P5 from 'p5.js'
 
 export default class World {
     public width: number
@@ -99,7 +100,7 @@ export default class World {
         }
         this.times.push(now);
         let fps = this.times.length;
-       //this.checkOverlap();
+       this.checkOverlap();
         this.render(fps);
         window.requestAnimationFrame(() => this.cycle());
 
