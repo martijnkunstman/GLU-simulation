@@ -30,7 +30,7 @@ export default class Boid {
 
     private graphic;
 
-    public constructor(location: Vector, bounds: Vector, id: number, invection: Invection, state: State, startSeperationAtDistance: number, pixi) {
+    public constructor(location: Vector, bounds: Vector, id: number, invection: Invection, state: State, startSeperationAtDistance: number, container) {
         this.invection = invection;
         this.location = location;
         this.bounds = bounds;
@@ -45,7 +45,7 @@ export default class Boid {
         this.graphic.endFill();
         this.graphic.x = this.location.x;
         this.graphic.y = this.location.y;
-        pixi.addChild(this.graphic)
+        container.addChild(this.graphic)
     
     }
 
@@ -72,7 +72,7 @@ export default class Boid {
 
     private separate(boids: Array<Boid>) {
 
-        //use multi hash map for performance
+        //use multi hash map for performance, quad tree
 
         //affect direction, based on forces of nearby
         let startSeperationAtDistance = this.startSeperationAtDistance;

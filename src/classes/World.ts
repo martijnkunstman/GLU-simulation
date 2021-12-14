@@ -2,7 +2,9 @@ import Util from "./Util";
 import Vector from "./Vector";
 import Boid from "./Boid";
 import Invection from "./Invection";
+import QuadTree from "./QuadTree";
 import * as PIXI from 'pixi.js'
+import Rectangle from "./Rectangle";
 
 export default class World {
     public width: number
@@ -20,6 +22,7 @@ export default class World {
     public container;
 
     private fps: number;
+    private quadTree: QuadTree;
 
     public time: number = 0;
     public times: Array<number> = [];
@@ -45,6 +48,7 @@ export default class World {
         document.body.appendChild(this.canvas);
         this.ctx = this.canvas.getContext("2d")
         */
+        this.quadTree = new QuadTree(new Rectangle(width/2,height/2,width/2,height/2),4)
         
         this.initialBoids = this.width * this.height * density;
         this.invection = invection;
@@ -95,7 +99,7 @@ export default class World {
         }
         this.times.push(now);
         let fps = this.times.length;
-        this.checkOverlap();
+       //this.checkOverlap();
         this.render(fps);
         window.requestAnimationFrame(() => this.cycle());
 
@@ -103,6 +107,7 @@ export default class World {
 
     public checkOverlap() {
 
+        
         this.boids.map(boid => boid.reset())
 
         let counter: number = 1;

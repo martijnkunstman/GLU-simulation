@@ -6,7 +6,7 @@ import Chart from 'chart.js/auto';
 import { Pane } from 'tweakpane';
 
 const PARAMS = {
-    density: 0.0006,
+    density: 0.002,
     seperation: 15
 };
 
@@ -14,7 +14,7 @@ const pane: Pane = new Pane();
 
 pane.addInput(
     PARAMS, 'density',
-    { min: 0.0001, max: 0.0012, step: 0.0001 }
+    { min: 0.001, max: 0.002, step: 0.0001 }
 ).on('change', (ev: any): void => {
     graphData = [];
     world.resetDensity(ev.value);
