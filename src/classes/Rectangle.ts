@@ -75,7 +75,7 @@ export default class Rectangle {
         return dx * dx + dy * dy;
     }
 
-    public distanceFrom(point): number {
+    public distanceFrom(point: Vector): number {
         return Math.sqrt(this.sqDistanceFrom(point));
     }
 
