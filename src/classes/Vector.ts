@@ -1,10 +1,12 @@
 export default class Vector {
-    public x
-    public y
+    public x: number
+    public y: number
+    public userData;
 
-    public constructor(x: number = 1, y: number = 1) {
+    public constructor(x: number = 1, y: number = 1, data: any = []) {
         this.x = x
         this.y = y
+        this.userData = data
     }
 
     public distance(vector: Vector): number {
@@ -37,7 +39,19 @@ export default class Vector {
         if (this.getMagnitude() > magnitude) {
             this.setMagnitude(magnitude)
         }
-    }    
+    }
 
     //create random vector with magnitude...
+
+    public sqDistanceFrom(other: Vector): number {
+        const dx = other.x - this.x;
+        const dy = other.y - this.y;
+
+        return dx * dx + dy * dy;
+    }
+
+    // Pythagorus: a^2 = b^2 + c^2
+    public distanceFrom(other: Vector): number {
+        return Math.sqrt(this.sqDistanceFrom(other));
+    }
 }

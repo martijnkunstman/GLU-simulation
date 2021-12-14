@@ -1,5 +1,5 @@
 import Vector from "./Vector";
-import Invection from "./Invection";
+import Infection from "./Infection";
 import Util from "./Util";
 import * as PIXI from 'pixi.js'
 
@@ -14,7 +14,7 @@ export default class Boid {
     public location: Vector;
     public direction: Vector;
     public bounds: Vector;
-    public invection: Invection;
+    public infection: Infection;
     public radius: number = 5;
     public overlap: boolean = false;
     public checked: boolean = false;
@@ -30,8 +30,8 @@ export default class Boid {
 
     private graphic;
 
-    public constructor(location: Vector, bounds: Vector, id: number, invection: Invection, state: State, startSeperationAtDistance: number, container) {
-        this.invection = invection;
+    public constructor(location: Vector, bounds: Vector, id: number, infection: Infection, state: State, startSeperationAtDistance: number, container) {
+        this.infection = infection;
         this.location = location;
         this.bounds = bounds;
         this.id = id;
@@ -59,7 +59,7 @@ export default class Boid {
         if (this.state == State.Infectious) {
             this.infectionDuration++;
         }
-        if (this.infectionDuration > this.invection.duration) {
+        if (this.infectionDuration > this.infection.duration) {
             this.state = State.Recovered;
         }
         if (this.gotIt && this.state == State.Susceptible) {
@@ -152,7 +152,7 @@ export default class Boid {
 
         if (this.state == State.Infectious) {
             
-            let lineWIdth = Math.sin(this.infectionDuration/this.invection.duration*Math.PI)*20;
+            let lineWIdth = Math.sin(this.infectionDuration/this.infection.duration*Math.PI)*20;
             ctx.strokeStyle = "rgba(255,0,0,0.4)";
             ctx.lineWidth = lineWIdth;
         }

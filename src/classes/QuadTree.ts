@@ -41,6 +41,17 @@ export default class QuadTree {
         else if (this.southWest.insert(point)) { return true }
     }
 
+    public query(range:Rectangle){
+        let found = [];
+        if (!this.boundary.intersects(range)){
+            return found;
+        }
+        else{
+
+        }
+
+    }
+
     public subdivide() {
         let x = this.boundary.x;
         let y = this.boundary.y;

@@ -1,6 +1,6 @@
 import Simulation from "./classes/Simulation";
 import World from "./classes/World";
-import Invection from "./classes/Invection";
+import Infection from "./classes/Infection";
 import Chart from 'chart.js/auto';
 //import { getRelativePosition } from 'chart.js/helpers';
 import { Pane } from 'tweakpane';
@@ -39,8 +39,8 @@ document.body.style.display = "flex";
 //vaccinated
 
 console.log("start");
-let invection = new Invection(100, 0.5, 0.5, 10);
-let world = new World(700, 700, PARAMS.density, 10, invection, PARAMS.seperation);
+let infection = new Infection(100, 0.5, 0.5, 10);
+let world = new World(700, 700, PARAMS.density, 10, infection, PARAMS.seperation);
 let simulation: Simulation = new Simulation(world);
 
 let canvas = document.createElement('canvas')
