@@ -6,7 +6,7 @@ import Chart from 'chart.js/auto';
 import { Pane } from 'tweakpane';
 
 const PARAMS = {
-    density: 0.002,
+    density: 0.0005,
     seperation: 15
 };
 
@@ -37,6 +37,12 @@ document.body.style.display = "flex";
 //recovered / removed
 
 //vaccinated
+
+//render types:
+//canvas
+//pixi
+//p5
+
 
 console.log("start");
 let infection = new Infection(100, 0.5, 0.5, 10);

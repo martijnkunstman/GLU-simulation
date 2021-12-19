@@ -2,10 +2,9 @@ import Util from "./Util"
 import Vector from "./Vector"
 import Boid from "./Boid"
 import Infection from "./Infection"
-import QuadTree from "./QuadTree"
-import * as PIXI from 'pixi.js'
+//import * as PIXI from 'pixi.js'
 import Rectangle from "./Rectangle"
-//import P5 from 'p5.js'
+import p5 from "p5"
 
 export default class World {
     public width: number
@@ -19,16 +18,28 @@ export default class World {
     public infections: number;
     public startSeperationAtDistance: number;
 
-    public pixi;
-    public container;
+    //public pixi;
+    //public container;
+    public s = (sk:p5) => {    
+        sk.setup = () =>{
+            sk.createCanvas(this.width, this.height);
+            sk.background(40);
+            sk.stroke(200);
+            sk.strokeWeight(3);
+            sk.circle(10,10,50)
+        }    
+        sk.draw = () =>{    
+        }
+    }
+    public P5: p5
 
     private fps: number;
-    private quadTree: QuadTree;
 
     public time: number = 0;
     public times: Array<number> = [];
 
     public constructor(width: number, height: number, density: number, infections: number, infection: Infection, startSeperationAtDistance: number) {
+        /* PIXI
         this.pixi = new PIXI.Application({
             width: width,
             height: height,
@@ -38,9 +49,14 @@ export default class World {
 
         this.container = new PIXI.Container();
         this.pixi.stage.addChild(this.container);
+        */
 
         this.width = width;
         this.height = height;
+        this.P5 = new p5(this.s);
+        
+
+
         /*
         this.canvas = document.createElement('canvas')
         this.canvas.id = "world"
@@ -49,7 +65,7 @@ export default class World {
         document.body.appendChild(this.canvas);
         this.ctx = this.canvas.getContext("2d")
         */
-        this.quadTree = new QuadTree(new Rectangle(width/2,height/2,width/2,height/2),4)
+
         
         this.initialBoids = this.width * this.height * density;
         this.infection = infection;
@@ -59,14 +75,14 @@ export default class World {
             let bounds = new Vector(this.width, this.height)
             let infected
             a < this.infections ? infected = 1 : infected = 0
-            let boid = new Boid(location, bounds, a, infection, infected, startSeperationAtDistance, this.container)
-            this.boids.push(boid)
+            //let boid = new Boid(location, bounds, a, infection, infected, startSeperationAtDistance, this.container)
+            //this.boids.push(boid)
         }
         this.cycle();
     }
 
     public resetDensity(density: number) {
-        this.container.removeChildren();
+        //this.container.removeChildren();
         this.initialBoids = this.width * this.height * density;
         this.boids = [];
         for (let a: number = 0; a < this.initialBoids; a++) {
@@ -74,13 +90,13 @@ export default class World {
             let bounds = new Vector(this.width, this.height)
             let infected
             a < this.infections ? infected = 1 : infected = 0
-            let boid = new Boid(location, bounds, a, this.infection, infected, this.startSeperationAtDistance, this.container)
-            this.boids.push(boid)
+            //let boid = new Boid(location, bounds, a, this.infection, infected, this.startSeperationAtDistance, this.container)
+            //this.boids.push(boid)
         }
     }
 
     public resetSeperation(startSeperationAtDistance: number) {
-        this.container.removeChildren();
+        //this.container.removeChildren();
         this.startSeperationAtDistance = startSeperationAtDistance
         this.boids = [];
         for (let a: number = 0; a < this.initialBoids; a++) {
@@ -88,8 +104,8 @@ export default class World {
             let bounds = new Vector(this.width, this.height)
             let infected
             a < this.infections ? infected = 1 : infected = 0
-            let boid = new Boid(location, bounds, a, this.infection, infected, this.startSeperationAtDistance, this.container)
-            this.boids.push(boid)
+            //let boid = new Boid(location, bounds, a, this.infection, infected, this.startSeperationAtDistance, this.container)
+            //this.boids.push(boid)
         }
     }
 

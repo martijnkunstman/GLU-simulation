@@ -15,7 +15,7 @@ export default class Boid {
     public direction: Vector;
     public bounds: Vector;
     public infection: Infection;
-    public radius: number = 5;
+    public radius: number = 10;
     public overlap: boolean = false;
     public checked: boolean = false;
     public id: number;
@@ -134,7 +134,7 @@ export default class Boid {
 
     public cycle(ctx: CanvasRenderingContext2D, boids: Array<Boid>) {
         this.updateInfection();
-        //this.separate(boids);
+        this.separate(boids);
         this.updateLocation();
         this.render(ctx);
     }
