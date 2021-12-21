@@ -54,8 +54,8 @@ document.body.style.display = "flex";
 
 
 console.log("start");
-let infection = new Infection(50, 0.5, 0.5, 10);
-let world = new World(1200, 700, PARAMS.density, 2, infection, PARAMS.seperation, PARAMS.radius);
+let infection = new Infection(100, 0.5, 0.5, 10);
+let world = new World(1200, 700, PARAMS.density, 1, infection, PARAMS.seperation, PARAMS.radius);
 let simulation: Simulation = new Simulation(world);
 
 /*

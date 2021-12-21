@@ -28,7 +28,7 @@ export default class Boid {
 
     public constructor(location: Vector, bounds: Vector, id: number, infection: Infection, state: State, startSeperationAtDistance: number, radius: number) {
         this.rainbowArray = this.makeRainBowArray()
-        
+
         this.radius = radius;
         this.infection = infection;
         this.location = location;
@@ -78,7 +78,6 @@ export default class Boid {
                         if (boids[i].state == State.Infectious) {
                             this.state = State.Infectious;
                         }
-
                     }
                 }
                 if (distanceBetween < startSeperationAtDistance) {
@@ -90,21 +89,52 @@ export default class Boid {
             }
         }
         //checkborder//
-        this.direction.setMaxMagnitude(2);
+        this.direction.setMaxMagnitude(1.5);
     }
 
 
 
     private updateLocation() {
 
+        //move from edge
+        let startSeperationAtDistance = this.startSeperationAtDistance;
+        if (this.location.x <= startSeperationAtDistance) {
+            this.direction.x = this.direction.x + (startSeperationAtDistance - this.location.x) / startSeperationAtDistance;
+         }
+        if (this.location.x >= this.bounds.x - startSeperationAtDistance) {
+            this.direction.x = this.direction.x + ((this.bounds.x - startSeperationAtDistance) - this.location.x) / startSeperationAtDistance;
+         }
+         //
+         if (this.location.y <= startSeperationAtDistance) {
+            this.direction.y = this.direction.y + (startSeperationAtDistance - this.location.y) / startSeperationAtDistance;
+         }
+        if (this.location.y >= this.bounds.y - startSeperationAtDistance) {
+            this.direction.y = this.direction.y + ((this.bounds.y - startSeperationAtDistance) - this.location.y) / startSeperationAtDistance;
+         }
+
+        
         this.location.x = this.location.x + this.direction.x
         this.location.y = this.location.y + this.direction.y
 
+        //no edges
+        /*
+        if (this.location.x < 0) { this.location.x = this.bounds.x + this.location.x }
+        if (this.location.y < 0) { this.location.y = this.bounds.y + this.location.y }
+        if (this.location.x > this.bounds.x) { this.location.x = this.location.x - this.bounds.x}
+        if (this.location.y > this.bounds.y) { this.location.y = this.location.y - this.bounds.y}
+        */
+
+        
         //flip direction on border
+        /*
         if (this.location.x < 0) { this.location.x = -this.location.x; this.direction.x = -this.direction.x }
         if (this.location.y < 0) { this.location.y = -this.location.y; this.direction.y = -this.direction.y }
         if (this.location.x > this.bounds.x) { this.location.x = this.bounds.x - (this.location.x - this.bounds.x); this.direction.x = -this.direction.x }
         if (this.location.y > this.bounds.y) { this.location.y = this.bounds.y - (this.location.y - this.bounds.y); this.direction.y = -this.direction.y }
+        */
+        
+
+
 
     }
 
@@ -121,11 +151,15 @@ export default class Boid {
 
         ctx.strokeStyle = "black";
         ctx.lineWidth = 1;
+
+        /*
         if (this.overlap) {
             ctx.strokeStyle = "red";
             ctx.lineWidth = 2;
         }
+        */
 
+        /*
         if (this.state == State.Infectious) {
 
             ctx.beginPath();
@@ -134,23 +168,32 @@ export default class Boid {
             ctx.fillStyle = "rgba(255,0,0,0.5)";
             ctx.fill();
         }
+        */
 
         ctx.beginPath();
         ctx.arc(this.location.x, this.location.y, this.radius, 0, 2 * Math.PI);
-        ctx.stroke();
+        //ctx.stroke();
 
 
         let color = "#ffffff";
 
         if (this.state == State.Infectious) {
-                color = this.rainbowArray[this.infectionCount % 12];
+            color = this.rainbowArray[this.infectionCount % 12];
+            ctx.fillStyle = color;
+            ctx.fill();
         }
-        if (this.state == State.Recovered) {
+        else if (this.state == State.Recovered) {
             color = "#bbbbbb";
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+        else if (this.state == State.Susceptible) {
+            color = "#ffffff";
+            ctx.fillStyle = color;
+            ctx.fill();
         }
 
-        ctx.fillStyle = color;
-        ctx.fill();
+
 
     }
 

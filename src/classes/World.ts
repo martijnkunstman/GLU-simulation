@@ -107,7 +107,6 @@ export default class World {
             this.times.shift();
         }
         this.times.push(now);
-        let fps = this.times.length;
     }
 
     public cycle() {
@@ -125,11 +124,12 @@ export default class World {
 
         for (let boid of this.boids) {
             boid.cycle(this.ctx, this.spacialHash.getNeighbours(boid))
+            //no spacial hash
             //boid.cycle(this.ctx, this.boids)
         }
 
         this.ctx.fillStyle = "black";
-        this.ctx.fillText(this.times.length.toString(), 10, 10);
+        this.ctx.fillText(this.times.length.toString(), 10, 35);
 
     }
 }
