@@ -14,31 +14,24 @@ export default class Boid {
     public direction: Vector;
     public bounds: Vector;
     public infection: Infection;
-    public radius: number = 5;
-    public overlap: boolean = false;
-    public checked: boolean = false;
+    public radius: number;
     public id: number;
-    public state: State; //temp
-    public gotIt: boolean = false; //temp
+    public state: State;
     public startSeperationAtDistance: number;
+    private overlap: boolean;
 
     private speed = 1;
     private infectionDuration: number = 0;
 
-    public constructor(location: Vector, bounds: Vector, id: number, infection: Infection, state: State, startSeperationAtDistance: number) {
+    public constructor(location: Vector, bounds: Vector, id: number, infection: Infection, state: State, startSeperationAtDistance: number, radius: number) {
+        this.radius = radius;
         this.infection = infection;
         this.location = location;
         this.bounds = bounds;
         this.id = id;
         this.state = state;
         this.startSeperationAtDistance = startSeperationAtDistance;
-        this.direction = new Vector((Util.random()-0.5)*this.speed, (Util.random()-0.5)*this.speed)
-    }
-
-    public reset() {
-        this.overlap = false
-        this.checked = false
-        this.gotIt = false
+        this.direction = new Vector((Util.random() - 0.5) * this.speed, (Util.random() - 0.5) * this.speed)
     }
 
     private updateInfection() {
@@ -48,20 +41,30 @@ export default class Boid {
         if (this.infectionDuration > this.infection.duration) {
             this.state = State.Recovered;
         }
-        if (this.gotIt && this.state == State.Susceptible) {
-            this.state = State.Infectious;
-        }
-
         //todo: die...        
     }
 
 
     private separate(boids: Array<Boid>) {
 
+        this.overlap = false;
         let startSeperationAtDistance = this.startSeperationAtDistance;
         for (let i: number = 0; i < boids.length; i++) {
             if (this.id != boids[i].id) {
                 let distanceBetween = this.location.distance(boids[i].location);
+                //todo: optimise if statment based on distances...
+                if (distanceBetween < this.radius + boids[i].radius) {
+                    this.overlap = true;
+                }
+                if (this.state == State.Susceptible) {
+                    if (distanceBetween < this.radius + boids[i].infection.transmittability) {
+                        //todo build in contagiousness
+                        if (boids[i].state == State.Infectious) {
+                            this.state = State.Infectious;
+                        }
+
+                    }
+                }
                 if (distanceBetween < startSeperationAtDistance) {
                     let affectFactor = (startSeperationAtDistance - distanceBetween) / startSeperationAtDistance;
                     let affectVector = new Vector(this.location.x - boids[i].location.x, this.location.y - boids[i].location.y);
@@ -70,42 +73,22 @@ export default class Boid {
                 }
             }
         }
+        //checkborder//
         this.direction.setMaxMagnitude(2);
     }
 
 
 
     private updateLocation() {
+
         this.location.x = this.location.x + this.direction.x
         this.location.y = this.location.y + this.direction.y
 
-        /*
-        //flip direction beyond border
-        if (this.location.x < 0) { this.direction.x = -this.direction.x }
-        if (this.location.x > this.bounds.x) { this.direction.x = -this.direction.x }
-        if (this.location.y < 0) { this.direction.y = -this.direction.y }
-        if (this.location.y > this.bounds.y) { this.direction.y = -this.direction.y }
-        */
-
-        //stay away from border
-        let startSeperationAtDistance = this.startSeperationAtDistance;
-        if (this.location.x < startSeperationAtDistance) {
-            this.direction.x = this.direction.x + (startSeperationAtDistance - this.location.x) / startSeperationAtDistance;
-         }
-        if (this.location.x > this.bounds.x - startSeperationAtDistance) {
-            this.direction.x = this.direction.x + ((this.bounds.x - startSeperationAtDistance) - this.location.x) / startSeperationAtDistance;
-         }
-         //
-         if (this.location.y < startSeperationAtDistance) {
-            this.direction.y = this.direction.y + (startSeperationAtDistance - this.location.y) / startSeperationAtDistance;
-         }
-        if (this.location.y > this.bounds.y - startSeperationAtDistance) {
-            this.direction.y = this.direction.y + ((this.bounds.y - startSeperationAtDistance) - this.location.y) / startSeperationAtDistance;
-         }
-         //
-
-
-
+        //flip direction on border
+        if (this.location.x < 0) { this.location.x = -this.location.x; this.direction.x = -this.direction.x }
+        if (this.location.y < 0) { this.location.y = -this.location.y; this.direction.y = -this.direction.y }
+        if (this.location.x > this.bounds.x) { this.location.x = this.bounds.x - (this.location.x - this.bounds.x); this.direction.x = -this.direction.x }
+        if (this.location.y > this.bounds.y) { this.location.y = this.bounds.y - (this.location.y - this.bounds.y); this.direction.y = -this.direction.y }
 
     }
 
@@ -119,7 +102,7 @@ export default class Boid {
 
 
     private render(ctx: CanvasRenderingContext2D) {
-        
+
         ctx.strokeStyle = "black";
         ctx.lineWidth = 1;
         if (this.overlap) {
@@ -128,16 +111,18 @@ export default class Boid {
         }
 
         if (this.state == State.Infectious) {
-            
-            let lineWIdth = Math.sin(this.infectionDuration/this.infection.duration*Math.PI)*20;
-            ctx.strokeStyle = "rgba(255,0,0,0.4)";
-            ctx.lineWidth = lineWIdth;
+
+            ctx.beginPath();
+            ctx.arc(this.location.x, this.location.y, this.infection.transmittability, 0, 2 * Math.PI);
+            //ctx.stroke();
+            ctx.fillStyle = "rgba(255,0,0,0.5)";
+            ctx.fill();
         }
 
         ctx.beginPath();
         ctx.arc(this.location.x, this.location.y, this.radius, 0, 2 * Math.PI);
         ctx.stroke();
-        
+
 
         let color = "#ffffff";
 
@@ -146,7 +131,7 @@ export default class Boid {
         }
         if (this.state == State.Recovered) {
             color = "#bbbbbb";
-        }       
+        }
 
         ctx.fillStyle = color;
         ctx.fill();

@@ -3,19 +3,19 @@ import Vector from "./Vector";
 
 export default class SpacialHash {
 
-  public gridSize:number
-  public hashTable:Array<any>
-  public horizontal:number
-  public vertical:number
-  
-  constructor(bounds : Vector, gridSize: number) {
+  public gridSize: number
+  public hashTable: Array<any>
+  public horizontal: number
+  public vertical: number
+
+  constructor(bounds: Vector, gridSize: number) {
     this.gridSize = gridSize;
     this.hashTable = [];
     this.horizontal = Math.ceil(bounds.x / gridSize);
     this.vertical = Math.ceil(bounds.y / gridSize);
-    for (let a = 0; a < this.vertical; a++) {
+    for (let a = 0; a <= this.vertical; a++) {
       this.hashTable.push([]);
-      for (let b = 0; b < this.horizontal; b++) {
+      for (let b = 0; b <= this.horizontal; b++) {
         this.hashTable[a].push([]);
       }
     }
@@ -28,17 +28,22 @@ export default class SpacialHash {
     }
   }
 
-  insert(object:Boid) {
-    this.hashTable[Math.floor(object.location.y / this.gridSize)][
-      Math.floor(object.location.x / this.gridSize)
-    ].push(object);
+  insert(object: Boid) {
+    let x = Math.floor(object.location.x / this.gridSize);
+    let y = Math.floor(object.location.y / this.gridSize);
+    if (x >= 0 && x < this.horizontal && y >= 0 && y < this.vertical) {
+      this.hashTable[y][x].push(object);
+    }
+    else{
+      console.log(x+"|"+y);
+    }
   }
 
-  getNeighbours(object:Boid){
+  getNeighbours(object: Boid) {
     return [].concat(...this.neighbors(Math.floor(object.location.y / this.gridSize), Math.floor(object.location.x / this.gridSize)))
-  }  
-  
-  neighbors(m:number, n:number) {
+  }
+
+  neighbors(m: number, n: number) {
     // define what a neighbor is
     let v = [
       [-1, -1],

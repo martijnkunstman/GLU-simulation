@@ -18,21 +18,21 @@ export default class World {
     public spacialHash: SpacialHash;
     public density: number;
 
-    public radius: number = 5; //todo: make argument in funcion and chang in Boid
+    public boidRadius: number;
 
     public time: number = 0;
     public times: Array<number> = [];
 
-    public constructor(width: number, height: number, density: number, infections: number, infection: Infection, startSeperationAtDistance: number) {
+    public constructor(width: number, height: number, density: number, infections: number, infection: Infection, startSeperationAtDistance: number, boidRadius: number) {
 
         this.width = width
         this.height = height
-        this.density = density
+        this.density = density //is now actual ammount of Boids
         this.startSeperationAtDistance = startSeperationAtDistance
         this.infection = infection
         this.infections = infections
-        this.spacialHash = new SpacialHash(new Vector(this.width, this.height), this.radius + infection.transmittability)
-
+        this.boidRadius = boidRadius;
+        
         this.canvas = document.createElement('canvas')
         this.canvas.id = "world"
         this.canvas.setAttribute("width", this.width.toString())
@@ -40,33 +40,50 @@ export default class World {
         document.body.appendChild(this.canvas);
         this.ctx = this.canvas.getContext("2d")
 
-        this.init(this.density, this.startSeperationAtDistance);
+        this.init(this.density, this.startSeperationAtDistance, this.boidRadius);
 
         this.cycle();
     }
 
-    public init(density: number, startSeperationAtDistance: number) {
+    public init(density: number, startSeperationAtDistance: number, boidRadius: number) {
+        let spacialHashGridSize: number;
+        if (this.infection.transmittability>startSeperationAtDistance)
+        {
+            spacialHashGridSize=this.infection.transmittability;
+        }
+        else
+        {
+            spacialHashGridSize=startSeperationAtDistance;
+        }       
+        this.spacialHash = new SpacialHash(new Vector(this.width, this.height), spacialHashGridSize)
+
+        this.boidRadius = boidRadius;
         this.boids = []
         this.density = density;
         this.startSeperationAtDistance = startSeperationAtDistance;
-        this.initialBoids = this.width * this.height * this.density;
+        //this.initialBoids = this.width * this.height * this.density;
+        this.initialBoids = this.density;
         for (let a: number = 0; a < this.initialBoids; a++) {
             let location = new Vector(Util.randomBetween(0, this.width), Util.randomBetween(0, this.height))
             let bounds = new Vector(this.width, this.height)
             let infected
             a < this.infections ? infected = 1 : infected = 0
-            let boid = new Boid(location, bounds, a, this.infection, infected, this.startSeperationAtDistance)
+            let boid = new Boid(location, bounds, a, this.infection, infected, this.startSeperationAtDistance, this.boidRadius)
             this.boids.push(boid)
         }
     }
 
     public resetDensity(density: number) {
-        this.init(density, this.startSeperationAtDistance)
+        this.init(density, this.startSeperationAtDistance, this.boidRadius)
+    }
+    public resetSeperation(seperation: number) {
+        this.init(this.density, seperation, this.boidRadius)
+    }
+    public resetRadius(radius: number) {
+        this.init(this.density, this.startSeperationAtDistance, radius)
     }
 
-    public resetSeperation(startSeperationAtDistance: number) {
-        this.init(this.density, startSeperationAtDistance)
-    }
+
 
     public updateSpacialHash() {
         this.spacialHash.clear();
@@ -87,42 +104,10 @@ export default class World {
     public cycle() {
         this.fps()
         this.updateSpacialHash();
-        //this.checkOverlap();
         this.render();
         window.requestAnimationFrame(() => this.cycle());
     }
-
-    public checkOverlap() {
-
-        this.boids.map(boid => boid.reset())
-
-        let counter: number = 1;
-        for (let i: number = 0; i < this.boids.length; i++) {
-            //if (!this.boids[i].checked) {
-            for (let ii: number = counter; ii < this.boids.length; ii++) {
-                if (this.boids[i].id != this.boids[ii].id) {
-                    if (this.boids[i].location.distance(this.boids[ii].location) < this.boids[i].radius + this.boids[ii].radius + 5) {
-                        this.boids[i].overlap = true;
-                        this.boids[ii].overlap = true;
-                        this.boids[i].checked = true;
-                        this.boids[ii].checked = true;
-                        //break;
-                        if (this.boids[i].state == 1) {
-                            this.boids[ii].gotIt = true
-                        }
-                        if (this.boids[ii].state == 1) {
-                            this.boids[i].gotIt = true
-                        }
-                    }
-                }
-                this.boids[i].checked = true;
-            }
-            //}
-            counter++;
-        }
-    }
-
-
+    
     public render() {
 
         this.ctx.fillStyle = "#dddddd";
@@ -132,6 +117,7 @@ export default class World {
         for (let boid of this.boids)
         {
             boid.cycle(this.ctx, this.spacialHash.getNeighbours(boid))
+            //boid.cycle(this.ctx, this.boids)
         }     
         
         this.ctx.fillStyle = "black";
