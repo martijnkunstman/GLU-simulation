@@ -32,11 +32,22 @@ export default class World {
         this.infection = infection
         this.infections = infections
         this.boidRadius = boidRadius;
-        
+
         this.canvas = document.createElement('canvas')
         this.canvas.id = "world"
         this.canvas.setAttribute("width", this.width.toString())
         this.canvas.setAttribute("height", this.height.toString())
+
+        this.canvas.addEventListener('click', (e) => {
+            var x = e.pageX - document.getElementById('world').offsetLeft;
+            var y = e.pageY - document.getElementById('world').offsetTop;
+            for (let boid of this.boids) {
+                if ((boid.location.x - boid.radius*2 < x) && (boid.location.x + boid.radius*2 > x) && (boid.location.y - boid.radius*2 < y) && (boid.location.y + boid.radius*2 > y)) {
+                    boid.infect();
+                }
+            }
+        });
+
         document.body.appendChild(this.canvas);
         this.ctx = this.canvas.getContext("2d")
 
@@ -47,14 +58,12 @@ export default class World {
 
     public init(density: number, startSeperationAtDistance: number, boidRadius: number) {
         let spacialHashGridSize: number;
-        if (this.infection.transmittability>startSeperationAtDistance)
-        {
-            spacialHashGridSize=this.infection.transmittability;
+        if (this.infection.transmittability > startSeperationAtDistance) {
+            spacialHashGridSize = this.infection.transmittability;
         }
-        else
-        {
-            spacialHashGridSize=startSeperationAtDistance;
-        }       
+        else {
+            spacialHashGridSize = startSeperationAtDistance;
+        }
         this.spacialHash = new SpacialHash(new Vector(this.width, this.height), spacialHashGridSize)
 
         this.boidRadius = boidRadius;
@@ -107,21 +116,20 @@ export default class World {
         this.render();
         window.requestAnimationFrame(() => this.cycle());
     }
-    
+
     public render() {
 
         this.ctx.fillStyle = "#dddddd";
         this.ctx.fillRect(0, 0, this.width, this.height);
         this.ctx.font = "30px Arial";
 
-        for (let boid of this.boids)
-        {
+        for (let boid of this.boids) {
             boid.cycle(this.ctx, this.spacialHash.getNeighbours(boid))
             //boid.cycle(this.ctx, this.boids)
-        }     
-        
+        }
+
         this.ctx.fillStyle = "black";
-        this.ctx.fillText(this.times.length.toString(), 50, 50);
+        this.ctx.fillText(this.times.length.toString(), 10, 10);
 
     }
 }

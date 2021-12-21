@@ -22,8 +22,13 @@ export default class Boid {
 
     private speed = 1;
     private infectionDuration: number = 0;
+    private infectionCount: number = 0;
+
+    private rainbowArray: Array<string>
 
     public constructor(location: Vector, bounds: Vector, id: number, infection: Infection, state: State, startSeperationAtDistance: number, radius: number) {
+        this.rainbowArray = this.makeRainBowArray()
+        
         this.radius = radius;
         this.infection = infection;
         this.location = location;
@@ -38,12 +43,23 @@ export default class Boid {
         if (this.state == State.Infectious) {
             this.infectionDuration++;
         }
+        if (this.state == State.Recovered) {
+            this.infectionDuration++;
+        }
         if (this.infectionDuration > this.infection.duration) {
             this.state = State.Recovered;
+        }
+        if (this.infectionDuration > this.infection.duration * 2) {
+            this.state = State.Susceptible;
+            this.infectionCount++;
+            this.infectionDuration = 0;
         }
         //todo: die...        
     }
 
+    public infect() {
+        this.state = State.Infectious;
+    }
 
     private separate(boids: Array<Boid>) {
 
@@ -127,7 +143,7 @@ export default class Boid {
         let color = "#ffffff";
 
         if (this.state == State.Infectious) {
-            color = "#ff0000";
+                color = this.rainbowArray[this.infectionCount % 12];
         }
         if (this.state == State.Recovered) {
             color = "#bbbbbb";
@@ -137,4 +153,30 @@ export default class Boid {
         ctx.fill();
 
     }
+
+
+    makeRainBowArray(): Array<string> {
+
+        var size = 12;
+        var rainbow = new Array(size);
+
+        for (var i = 0; i < size; i++) {
+            var red = sin_to_hex(i, 0 * Math.PI * 2 / 3); // 0   deg
+            var blue = sin_to_hex(i, 1 * Math.PI * 2 / 3); // 120 deg
+            var green = sin_to_hex(i, 2 * Math.PI * 2 / 3); // 240 deg
+
+            rainbow[i] = "#" + red + green + blue;
+        }
+
+        function sin_to_hex(i, phase) {
+            var sin = Math.sin(Math.PI / size * 2 * i + phase);
+            var int = Math.floor(sin * 127) + 128;
+            var hex = int.toString(16);
+
+            return hex.length === 1 ? "0" + hex : hex;
+        }
+
+        return rainbow;
+    }
+
 }

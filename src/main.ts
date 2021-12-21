@@ -6,32 +6,32 @@ import Chart from 'chart.js/auto';
 import { Pane } from 'tweakpane';
 
 const PARAMS = {
-    density: 700,
-    seperation: 20,
-    radius: 5
+    density: 1000,
+    seperation: 18,
+    radius: 6
 };
 
 const pane: Pane = new Pane();
 
 pane.addInput(
     PARAMS, 'density',
-    { min: 10, max: 800, step: 10 }
+    { min: 10, max: 1200, step: 10 }
 ).on('change', (ev): void => {
-    graphData = [];
+    //graphData = [];
     world.resetDensity(ev.value);
 });
 pane.addInput(
     PARAMS, 'seperation',
     { min: 4, max: 30, step: 1 }
 ).on('change', (ev) => {
-    graphData = [];
+    //graphData = [];
     world.resetSeperation(ev.value);
 });
 pane.addInput(
     PARAMS, 'radius',
     { min: 4, max: 30, step: 1 }
 ).on('change', (ev) => {
-    graphData = [];
+    //graphData = [];
     world.resetRadius(ev.value);
 });
 
@@ -55,8 +55,10 @@ document.body.style.display = "flex";
 
 console.log("start");
 let infection = new Infection(50, 0.5, 0.5, 10);
-let world = new World(700, 700, PARAMS.density, 10, infection, PARAMS.seperation, PARAMS.radius);
+let world = new World(1200, 700, PARAMS.density, 2, infection, PARAMS.seperation, PARAMS.radius);
 let simulation: Simulation = new Simulation(world);
+
+/*
 
 let canvas = document.createElement('canvas')
 canvas.setAttribute("width", "700")
@@ -132,17 +134,7 @@ const chart = new Chart(ctx, {
             }
         },
         //responsiveAnimationDuration: 0,
-        responsive: false,
-        scales: {
-            /*
-            xAxes: [{
-                stacked: true,
-            }],
-            yAxes: [{
-                stacked: true,
-            }]
-            */
-        }
+        responsive: false        
     }
 }
 );
@@ -194,6 +186,10 @@ function updateChart() {
 }
 
 setInterval(updateChart, 250);
+
+*/
+
+
 
 
 
