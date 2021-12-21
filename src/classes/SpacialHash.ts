@@ -27,14 +27,18 @@ export default class SpacialHash {
       }
     }
   }
+
   insert(object:Boid) {
     this.hashTable[Math.floor(object.location.y / this.gridSize)][
       Math.floor(object.location.x / this.gridSize)
     ].push(object);
   }
-  find(point:Vector) {    
-  }
-  neighbors(arr:Array<any>, m:number, n:number) {
+
+  getNeighbours(object:Boid){
+    return [].concat(...this.neighbors(Math.floor(object.location.y / this.gridSize), Math.floor(object.location.x / this.gridSize)))
+  }  
+  
+  neighbors(m:number, n:number) {
     // define what a neighbor is
     let v = [
       [-1, -1],
@@ -51,9 +55,9 @@ export default class SpacialHash {
     return v
       .filter(
         ([h, j]) =>
-          h + m >= 0 && h + m < arr.length && j + n >= 0 && j + n < arr[0].length
+          h + m >= 0 && h + m < this.hashTable.length && j + n >= 0 && j + n < this.hashTable[0].length
       )
-      .map(([h, j]) => arr[h + m][j + n]);
+      .map(([h, j]) => this.hashTable[h + m][j + n]);
   }
 
 }

@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "chart.js": "^3.6.1",
-    "p5": "^1.4.0",
     "pixi.js": "^6.2.0",
     "tweakpane": "^3.0.6"
   }
