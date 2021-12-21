@@ -7,10 +7,11 @@ import { Pane } from 'tweakpane';
 
 const PARAMS = {
     density: 1000,
-    seperation: 18,
-    radius: 6
+    seperation: 9,
+    radius: 5
 };
 
+/*
 const pane: Pane = new Pane();
 
 pane.addInput(
@@ -34,10 +35,16 @@ pane.addInput(
     //graphData = [];
     world.resetRadius(ev.value);
 });
+*/
 
 
 
 document.body.style.display = "flex";
+document.body.style.alignItems = "center";
+document.body.style.justifyContent = "center";
+document.body.style.height = "100%";
+
+
 
 //SIR
 
@@ -54,8 +61,8 @@ document.body.style.display = "flex";
 
 
 console.log("start");
-let infection = new Infection(100, 0.5, 0.5, 10);
-let world = new World(1200, 700, PARAMS.density, 1, infection, PARAMS.seperation, PARAMS.radius);
+let infection = new Infection(100, 0.5, 0.5, 11);
+let world = new World(700, 700, PARAMS.density, 1, infection, PARAMS.seperation, PARAMS.radius);
 let simulation: Simulation = new Simulation(world);
 
 /*

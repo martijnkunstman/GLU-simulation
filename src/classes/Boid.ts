@@ -89,7 +89,7 @@ export default class Boid {
             }
         }
         //checkborder//
-        this.direction.setMaxMagnitude(1.5);
+        this.direction.setMaxMagnitude(1);
     }
 
 
@@ -165,14 +165,16 @@ export default class Boid {
             ctx.beginPath();
             ctx.arc(this.location.x, this.location.y, this.infection.transmittability, 0, 2 * Math.PI);
             //ctx.stroke();
-            ctx.fillStyle = "rgba(255,0,0,0.5)";
+            ctx.fillStyle = "rgba(0,0,0,0.4)";
             ctx.fill();
         }
         */
+        
 
         ctx.beginPath();
         ctx.arc(this.location.x, this.location.y, this.radius, 0, 2 * Math.PI);
-        //ctx.stroke();
+        ctx.strokeStyle = "rgba(0,0,0,1)";
+        ctx.stroke();
 
 
         let color = "#ffffff";
@@ -183,7 +185,7 @@ export default class Boid {
             ctx.fill();
         }
         else if (this.state == State.Recovered) {
-            color = "#bbbbbb";
+            color = "#666666";
             ctx.fillStyle = color;
             ctx.fill();
         }

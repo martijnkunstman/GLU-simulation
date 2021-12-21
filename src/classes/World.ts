@@ -118,18 +118,20 @@ export default class World {
 
     public render() {
 
-        this.ctx.fillStyle = "#dddddd";
+        this.ctx.fillStyle = "rgba(0,0,0,0.04)";
         this.ctx.fillRect(0, 0, this.width, this.height);
-        this.ctx.font = "30px Arial";
+        
 
         for (let boid of this.boids) {
             boid.cycle(this.ctx, this.spacialHash.getNeighbours(boid))
             //no spacial hash
             //boid.cycle(this.ctx, this.boids)
         }
-
+        /*
+        this.ctx.font = "30px Arial";
         this.ctx.fillStyle = "black";
         this.ctx.fillText(this.times.length.toString(), 10, 35);
+        */
 
     }
 }

@@ -1,6 +1,8 @@
 export default class Util {
 
-    private static seed: number = 123456 % 2147483647
+    private static seed: number = 123456 % 2147483647 //clockWise
+    
+    //private static seed: number = 123455 % 2147483647 //counterClockWise
 
     public static random(): number {
         this.seed = this.seed * 16807 % 2147483647
