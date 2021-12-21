@@ -20,6 +20,7 @@ export default class SpacialHash {
       }
     }
   }
+
   clear() {
     for (let a = 0; a < this.vertical; a++) {
       for (let b = 0; b < this.horizontal; b++) {
@@ -31,11 +32,8 @@ export default class SpacialHash {
   insert(object: Boid) {
     let x = Math.floor(object.location.x / this.gridSize);
     let y = Math.floor(object.location.y / this.gridSize);
-    if (x >= 0 && x < this.horizontal && y >= 0 && y < this.vertical) {
+    if (x < this.horizontal && y < this.vertical) {
       this.hashTable[y][x].push(object);
-    }
-    else{
-      console.log(x+"|"+y);
     }
   }
 
@@ -64,6 +62,5 @@ export default class SpacialHash {
       )
       .map(([h, j]) => this.hashTable[h + m][j + n]);
   }
-
 }
 
