@@ -77,6 +77,10 @@ export default class Boid {
                         //todo build in contagiousness
                         if (boids[i].state == State.Infectious) {
                             this.state = State.Infectious;
+                            if (this.infectionCount<boids[i].infectionCount)
+                            {
+                                this.infectionCount = boids[i].infectionCount;
+                            }
                         }
                     }
                 }
@@ -84,19 +88,20 @@ export default class Boid {
                     let affectFactor = (startSeperationAtDistance - distanceBetween) / startSeperationAtDistance;
                     let affectVector = new Vector(this.location.x - boids[i].location.x, this.location.y - boids[i].location.y);
                     affectVector.setMagnitude(affectFactor);
-                    this.direction = this.direction.add(affectVector);
+                    //this.direction = this.direction.add(affectVector);
                 }
+
+
             }
         }
         //checkborder//
-        this.direction.setMaxMagnitude(1);
+        //this.direction.setMaxMagnitude(1);
     }
-
-
 
     private updateLocation() {
 
         //move from edge
+        /*
         let startSeperationAtDistance = this.startSeperationAtDistance;
         if (this.location.x <= startSeperationAtDistance) {
             this.direction.x = this.direction.x + (startSeperationAtDistance - this.location.x) / startSeperationAtDistance;
@@ -111,10 +116,31 @@ export default class Boid {
         if (this.location.y >= this.bounds.y - startSeperationAtDistance) {
             this.direction.y = this.direction.y + ((this.bounds.y - startSeperationAtDistance) - this.location.y) / startSeperationAtDistance;
          }
+         */
 
-        
+
+
+        /*
         this.location.x = this.location.x + this.direction.x
         this.location.y = this.location.y + this.direction.y
+        */
+
+        //randomwalk
+        if (Math.random() < 0.5) {
+            this.location.x = this.location.x + 1
+        }
+        else {
+            this.location.x = this.location.x - 1
+        }
+        if (Math.random() < 0.5) {
+            this.location.y = this.location.y + 1
+        }
+        else {
+            this.location.y = this.location.y - 1
+        }
+
+
+
 
         //no edges
         /*
@@ -124,15 +150,15 @@ export default class Boid {
         if (this.location.y > this.bounds.y) { this.location.y = this.location.y - this.bounds.y}
         */
 
-        
+
         //flip direction on border
-        /*
+
         if (this.location.x < 0) { this.location.x = -this.location.x; this.direction.x = -this.direction.x }
         if (this.location.y < 0) { this.location.y = -this.location.y; this.direction.y = -this.direction.y }
         if (this.location.x > this.bounds.x) { this.location.x = this.bounds.x - (this.location.x - this.bounds.x); this.direction.x = -this.direction.x }
         if (this.location.y > this.bounds.y) { this.location.y = this.bounds.y - (this.location.y - this.bounds.y); this.direction.y = -this.direction.y }
-        */
-        
+
+
 
 
 
@@ -141,7 +167,9 @@ export default class Boid {
     public cycle(ctx: CanvasRenderingContext2D, boids: Array<Boid>) {
         this.updateInfection();
         this.separate(boids);
+
         this.updateLocation();
+
         this.render(ctx);
     }
 
@@ -159,17 +187,19 @@ export default class Boid {
         }
         */
 
-        /*
+        
         if (this.state == State.Infectious) {
 
             ctx.beginPath();
-            ctx.arc(this.location.x, this.location.y, this.infection.transmittability, 0, 2 * Math.PI);
+            let dif = this.infection.transmittability - this.radius;            
+            dif = dif * Math.sin(this.infectionDuration/this.infection.duration*Math.PI)
+            ctx.arc(this.location.x, this.location.y, this.radius + dif, 0, 2 * Math.PI);
             //ctx.stroke();
-            ctx.fillStyle = "rgba(0,0,0,0.4)";
+            ctx.fillStyle = "rgba(0,0,0,0.3)";
             ctx.fill();
         }
-        */
         
+
 
         ctx.beginPath();
         ctx.arc(this.location.x, this.location.y, this.radius, 0, 2 * Math.PI);
@@ -185,7 +215,7 @@ export default class Boid {
             ctx.fill();
         }
         else if (this.state == State.Recovered) {
-            color = "#666666";
+            color = "#eeeeee";
             ctx.fillStyle = color;
             ctx.fill();
         }

@@ -23,6 +23,9 @@ export default class World {
     public time: number = 0;
     public times: Array<number> = [];
 
+    public _temp_useSpacialHash = true;
+    public _temp_showFTP = true;
+
     public constructor(width: number, height: number, density: number, infections: number, infection: Infection, startSeperationAtDistance: number, boidRadius: number) {
 
         this.width = width
@@ -42,7 +45,7 @@ export default class World {
             var x = e.pageX - document.getElementById('world').offsetLeft;
             var y = e.pageY - document.getElementById('world').offsetTop;
             for (let boid of this.boids) {
-                if ((boid.location.x - boid.radius*2 < x) && (boid.location.x + boid.radius*2 > x) && (boid.location.y - boid.radius*2 < y) && (boid.location.y + boid.radius*2 > y)) {
+                if ((boid.location.x - boid.radius * 2 < x) && (boid.location.x + boid.radius * 2 > x) && (boid.location.y - boid.radius * 2 < y) && (boid.location.y + boid.radius * 2 > y)) {
                     boid.infect();
                 }
             }
@@ -118,20 +121,26 @@ export default class World {
 
     public render() {
 
-        this.ctx.fillStyle = "rgba(0,0,0,0.04)";
+        //this.ctx.fillStyle = "rgba(120,120,120,0.04)";
+        this.ctx.fillStyle = "rgba(120,120,120,1)";
         this.ctx.fillRect(0, 0, this.width, this.height);
-        
+
 
         for (let boid of this.boids) {
-            boid.cycle(this.ctx, this.spacialHash.getNeighbours(boid))
-            //no spacial hash
-            //boid.cycle(this.ctx, this.boids)
+            if (this._temp_useSpacialHash) {
+                boid.cycle(this.ctx, this.spacialHash.getNeighbours(boid))
+            }
+            else {
+                //no spacial hash
+                boid.cycle(this.ctx, this.boids)
+            }
         }
-        /*
-        this.ctx.font = "30px Arial";
-        this.ctx.fillStyle = "black";
-        this.ctx.fillText(this.times.length.toString(), 10, 35);
-        */
-
+        if (this._temp_showFTP) {
+            this.ctx.font = "15px Arial";
+            this.ctx.fillStyle = "rgba(0,0,0,1)";
+            this.ctx.fillRect(0, 0, 50, 25);
+            this.ctx.fillStyle = "white";
+            this.ctx.fillText(this.times.length.toString()+"fps", 7,16);
+        }
     }
 }

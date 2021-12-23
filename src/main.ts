@@ -6,9 +6,9 @@ import Chart from 'chart.js/auto';
 import { Pane } from 'tweakpane';
 
 const PARAMS = {
-    density: 1000,
-    seperation: 9,
-    radius: 5
+    density: 800,
+    seperation: 10,
+    radius: 6
 };
 
 /*
@@ -39,12 +39,6 @@ pane.addInput(
 
 
 
-document.body.style.display = "flex";
-document.body.style.alignItems = "center";
-document.body.style.justifyContent = "center";
-document.body.style.height = "100%";
-
-
 
 //SIR
 
@@ -61,7 +55,7 @@ document.body.style.height = "100%";
 
 
 console.log("start");
-let infection = new Infection(100, 0.5, 0.5, 11);
+let infection = new Infection(120, 0.5, 0.5, 15);
 let world = new World(700, 700, PARAMS.density, 1, infection, PARAMS.seperation, PARAMS.radius);
 let simulation: Simulation = new Simulation(world);
 

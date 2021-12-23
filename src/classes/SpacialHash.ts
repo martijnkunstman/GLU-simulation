@@ -3,10 +3,10 @@ import Vector from "./Vector";
 
 export default class SpacialHash {
 
-  public gridSize: number
-  public hashTable: Array<any>
-  public horizontal: number
-  public vertical: number
+  private gridSize: number
+  private hashTable: Array<any>
+  private horizontal: number
+  private vertical: number
 
   constructor(bounds: Vector, gridSize: number) {
     this.gridSize = gridSize;
@@ -21,7 +21,7 @@ export default class SpacialHash {
     }
   }
 
-  clear() {
+  public clear() {
     for (let a = 0; a < this.vertical; a++) {
       for (let b = 0; b < this.horizontal; b++) {
         this.hashTable[a][b] = [];
@@ -29,7 +29,7 @@ export default class SpacialHash {
     }
   }
 
-  insert(object: Boid) {
+  public insert(object: Boid) {
     let x = Math.floor(object.location.x / this.gridSize);
     let y = Math.floor(object.location.y / this.gridSize);
     if (x < this.horizontal && y < this.vertical) {
@@ -37,11 +37,11 @@ export default class SpacialHash {
     }
   }
 
-  getNeighbours(object: Boid) {
+  public getNeighbours(object: Boid) {
     return [].concat(...this.neighbors(Math.floor(object.location.y / this.gridSize), Math.floor(object.location.x / this.gridSize)))
   }
 
-  neighbors(m: number, n: number) {
+  private neighbors(m: number, n: number) {
     // define what a neighbor is
     let v = [
       [-1, -1],
@@ -63,4 +63,3 @@ export default class SpacialHash {
       .map(([h, j]) => this.hashTable[h + m][j + n]);
   }
 }
-
