@@ -7,7 +7,7 @@ import { Pane } from 'tweakpane';
 
 const PARAMS = {
     density: 800,
-    seperation: 10,
+    seperation: 9,
     radius: 6
 };
 
@@ -55,8 +55,8 @@ pane.addInput(
 
 
 console.log("start");
-let infection = new Infection(120, 0.5, 0.5, 15);
-let world = new World(700, 700, PARAMS.density, 1, infection, PARAMS.seperation, PARAMS.radius);
+let infection = new Infection(100, 0.5, 0.5, 11);
+let world = new World(750, 750, PARAMS.density, 2, infection, PARAMS.seperation, PARAMS.radius);
 let simulation: Simulation = new Simulation(world);
 
 /*

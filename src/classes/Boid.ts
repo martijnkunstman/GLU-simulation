@@ -20,11 +20,13 @@ export default class Boid {
     public startSeperationAtDistance: number;
     private overlap: boolean;
 
-    private speed = 1;
+    private speed = 0.2;
     private infectionDuration: number = 0;
     private infectionCount: number = 0;
 
     private rainbowArray: Array<string>
+
+    private color:string = "#ffffff";
 
     public constructor(location: Vector, bounds: Vector, id: number, infection: Infection, state: State, startSeperationAtDistance: number, radius: number) {
         this.rainbowArray = this.makeRainBowArray()
@@ -49,7 +51,7 @@ export default class Boid {
         if (this.infectionDuration > this.infection.duration) {
             this.state = State.Recovered;
         }
-        if (this.infectionDuration > this.infection.duration * 2) {
+        if (this.infectionDuration > this.infection.duration * 1.5) {
             this.state = State.Susceptible;
             this.infectionCount++;
             this.infectionDuration = 0;
@@ -72,13 +74,13 @@ export default class Boid {
                 if (distanceBetween < this.radius + boids[i].radius) {
                     this.overlap = true;
                 }
-                if (this.state == State.Susceptible) {
-                    if (distanceBetween < this.radius + boids[i].infection.transmittability) {
-                        //todo build in contagiousness
+
+                if (distanceBetween < this.radius + boids[i].infection.transmittability) {
+                    //todo build in contagiousness
+                    if (this.state == State.Susceptible) {
                         if (boids[i].state == State.Infectious) {
                             this.state = State.Infectious;
-                            if (this.infectionCount<boids[i].infectionCount)
-                            {
+                            if (this.infectionCount < boids[i].infectionCount) {
                                 this.infectionCount = boids[i].infectionCount;
                             }
                         }
@@ -88,14 +90,14 @@ export default class Boid {
                     let affectFactor = (startSeperationAtDistance - distanceBetween) / startSeperationAtDistance;
                     let affectVector = new Vector(this.location.x - boids[i].location.x, this.location.y - boids[i].location.y);
                     affectVector.setMagnitude(affectFactor);
-                    //this.direction = this.direction.add(affectVector);
+                    this.direction = this.direction.add(affectVector);
                 }
 
 
             }
         }
         //checkborder//
-        //this.direction.setMaxMagnitude(1);
+        this.direction.setMaxMagnitude(0.75);
     }
 
     private updateLocation() {
@@ -120,24 +122,26 @@ export default class Boid {
 
 
 
-        /*
+
         this.location.x = this.location.x + this.direction.x
         this.location.y = this.location.y + this.direction.y
-        */
+
 
         //randomwalk
-        if (Math.random() < 0.5) {
+        /*
+        if (Util.random() < 0.5) {
             this.location.x = this.location.x + 1
         }
         else {
             this.location.x = this.location.x - 1
         }
-        if (Math.random() < 0.5) {
+        if (Util.random() < 0.5) {
             this.location.y = this.location.y + 1
         }
         else {
             this.location.y = this.location.y - 1
         }
+        */
 
 
 
@@ -167,9 +171,7 @@ export default class Boid {
     public cycle(ctx: CanvasRenderingContext2D, boids: Array<Boid>) {
         this.updateInfection();
         this.separate(boids);
-
         this.updateLocation();
-
         this.render(ctx);
     }
 
@@ -177,8 +179,8 @@ export default class Boid {
 
     private render(ctx: CanvasRenderingContext2D) {
 
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 1;
+        //ctx.strokeStyle = "black";
+        //ctx.lineWidth = 1;
 
         /*
         if (this.overlap) {
@@ -187,47 +189,46 @@ export default class Boid {
         }
         */
 
-        
         if (this.state == State.Infectious) {
-
             ctx.beginPath();
-            let dif = this.infection.transmittability - this.radius;            
-            dif = dif * Math.sin(this.infectionDuration/this.infection.duration*Math.PI)
+            let dif = this.infection.transmittability - this.radius;
+            dif = dif * Math.sin(this.infectionDuration / this.infection.duration * Math.PI)
             ctx.arc(this.location.x, this.location.y, this.radius + dif, 0, 2 * Math.PI);
             //ctx.stroke();
-            ctx.fillStyle = "rgba(0,0,0,0.3)";
+            ctx.fillStyle = "rgba(255,255,255,0.2)";
             ctx.fill();
         }
-        
-
 
         ctx.beginPath();
         ctx.arc(this.location.x, this.location.y, this.radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = "rgba(0,0,0,1)";
-        ctx.stroke();
+        //ctx.strokeStyle = "rgba(0,0,0,1)";
+        //ctx.stroke();
 
 
         let color = "#ffffff";
 
         if (this.state == State.Infectious) {
             color = this.rainbowArray[this.infectionCount % 12];
-            ctx.fillStyle = color;
-            ctx.fill();
         }
         else if (this.state == State.Recovered) {
-            color = "#eeeeee";
-            ctx.fillStyle = color;
-            ctx.fill();
+            color = "#aaaaaa";
         }
         else if (this.state == State.Susceptible) {
             color = "#ffffff";
-            ctx.fillStyle = color;
-            ctx.fill();
         }
+        this.color = this.blendColors(color, this.color, 0.95)
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }  
 
-
-
-    }
+    private blendColors(colorA : string, colorB : string, amount : number) {
+        const [rA, gA, bA] = colorA.match(/\w\w/g).map((c) => parseInt(c, 16));
+        const [rB, gB, bB] = colorB.match(/\w\w/g).map((c) => parseInt(c, 16));
+        const r = Math.round(rA + (rB - rA) * amount).toString(16).padStart(2, '0');
+        const g = Math.round(gA + (gB - gA) * amount).toString(16).padStart(2, '0');
+        const b = Math.round(bA + (bB - bA) * amount).toString(16).padStart(2, '0');
+        return '#' + r + g + b;
+      }
 
 
     makeRainBowArray(): Array<string> {
