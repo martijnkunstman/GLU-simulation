@@ -7,7 +7,7 @@ import { Pane } from 'tweakpane';
 
 const PARAMS = {
     density: 800,
-    seperation: 9,
+    seperation: 11,
     radius: 6
 };
 
