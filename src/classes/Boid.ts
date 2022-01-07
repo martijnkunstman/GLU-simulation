@@ -51,7 +51,7 @@ export default class Boid {
         if (this.infectionDuration > this.infection.duration) {
             this.state = State.Recovered;
         }
-        if (this.infectionDuration > this.infection.duration * 1.5) {
+        if (this.infectionDuration > this.infection.duration * 3) {
             this.state = State.Susceptible;
             this.infectionCount++;
             this.infectionDuration = 0;
@@ -94,33 +94,34 @@ export default class Boid {
                 }
 
 
+                
             }
-        }
-        //checkborder//
-        this.direction.setMaxMagnitude(0.75);
+        }        
+        this.direction.setMaxMagnitude(0.85);
     }
 
     private updateLocation() {
 
         //move from edge
-        /*
-        let startSeperationAtDistance = this.startSeperationAtDistance;
+        let factor = 4
+        let startSeperationAtDistance = this.startSeperationAtDistance * factor;
         if (this.location.x <= startSeperationAtDistance) {
-            this.direction.x = this.direction.x + (startSeperationAtDistance - this.location.x) / startSeperationAtDistance;
+            this.direction.x = this.direction.x + ((startSeperationAtDistance - this.location.x) / startSeperationAtDistance)/factor;
          }
         if (this.location.x >= this.bounds.x - startSeperationAtDistance) {
-            this.direction.x = this.direction.x + ((this.bounds.x - startSeperationAtDistance) - this.location.x) / startSeperationAtDistance;
+            this.direction.x = this.direction.x + (((this.bounds.x - startSeperationAtDistance) - this.location.x) / startSeperationAtDistance)/factor;
          }
          //
          if (this.location.y <= startSeperationAtDistance) {
-            this.direction.y = this.direction.y + (startSeperationAtDistance - this.location.y) / startSeperationAtDistance;
+            this.direction.y = this.direction.y + ((startSeperationAtDistance - this.location.y) / startSeperationAtDistance) / factor;
          }
         if (this.location.y >= this.bounds.y - startSeperationAtDistance) {
-            this.direction.y = this.direction.y + ((this.bounds.y - startSeperationAtDistance) - this.location.y) / startSeperationAtDistance;
+            this.direction.y = this.direction.y + (((this.bounds.y - startSeperationAtDistance) - this.location.y) / startSeperationAtDistance) / factor;
          }
-         */
+        
 
-
+         //this.direction.x = this.direction.x + Util.randomBetween(-0.005,0.005);
+         //this.direction.y = this.direction.y + Util.randomBetween(-0.005,0.005);
 
 
         this.location.x = this.location.x + this.direction.x
@@ -157,10 +158,15 @@ export default class Boid {
 
         //flip direction on border
 
-        if (this.location.x < 0) { this.location.x = -this.location.x; this.direction.x = -this.direction.x }
-        if (this.location.y < 0) { this.location.y = -this.location.y; this.direction.y = -this.direction.y }
-        if (this.location.x > this.bounds.x) { this.location.x = this.bounds.x - (this.location.x - this.bounds.x); this.direction.x = -this.direction.x }
-        if (this.location.y > this.bounds.y) { this.location.y = this.bounds.y - (this.location.y - this.bounds.y); this.direction.y = -this.direction.y }
+        //if (this.location.x < 0) { this.location.x = -this.location.x; this.direction.x = -this.direction.x }
+        //if (this.location.y < 0) { this.location.y = -this.location.y; this.direction.y = -this.direction.y }
+        //if (this.location.x > this.bounds.x) { this.location.x = this.bounds.x - (this.location.x - this.bounds.x); this.direction.x = -this.direction.x }
+        //if (this.location.y > this.bounds.y) { this.location.y = this.bounds.y - (this.location.y - this.bounds.y); this.direction.y = -this.direction.y }
+
+        //if (this.location.x < 0) { this.location.x = 0; this.direction.x = -this.direction.x }
+        //if (this.location.y < 0) { this.location.y = 0; this.direction.y = -this.direction.y }
+        //if (this.location.x > this.bounds.x) { this.location.x = this.bounds.x; this.direction.x = -this.direction.x }
+        //if (this.location.y > this.bounds.y) { this.location.y = this.bounds.y; this.direction.y = -this.direction.y }
 
 
 
@@ -195,7 +201,7 @@ export default class Boid {
             dif = dif * Math.sin(this.infectionDuration / this.infection.duration * Math.PI)
             ctx.arc(this.location.x, this.location.y, this.radius + dif, 0, 2 * Math.PI);
             //ctx.stroke();
-            ctx.fillStyle = "rgba(255,255,255,0.2)";
+            ctx.fillStyle = "rgba(0,0,0,0.3)";
             ctx.fill();
         }
 
@@ -216,7 +222,7 @@ export default class Boid {
         else if (this.state == State.Susceptible) {
             color = "#ffffff";
         }
-        this.color = this.blendColors(color, this.color, 0.95)
+        this.color = this.blendColors(color, this.color, 0.97)
         ctx.fillStyle = this.color;
         ctx.fill();
     }  

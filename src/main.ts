@@ -6,9 +6,9 @@ import Chart from 'chart.js/auto';
 import { Pane } from 'tweakpane';
 
 const PARAMS = {
-    density: 800,
-    seperation: 11,
-    radius: 6
+    density: 1000,
+    seperation: 14,
+    radius: 5
 };
 
 /*
@@ -56,7 +56,7 @@ pane.addInput(
 
 console.log("start");
 let infection = new Infection(100, 0.5, 0.5, 11);
-let world = new World(750, 750, PARAMS.density, 2, infection, PARAMS.seperation, PARAMS.radius);
+let world = new World(800, 800, PARAMS.density, 2, infection, PARAMS.seperation, PARAMS.radius);
 let simulation: Simulation = new Simulation(world);
 
 /*
