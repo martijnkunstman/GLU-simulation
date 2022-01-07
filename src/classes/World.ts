@@ -41,6 +41,7 @@ export default class World {
         this.canvas.setAttribute("width", this.width.toString())
         this.canvas.setAttribute("height", this.height.toString())
 
+        /*
         this.canvas.addEventListener('click', (e) => {
             var x = e.pageX - document.getElementById('world').offsetLeft;
             var y = e.pageY - document.getElementById('world').offsetTop;
@@ -50,6 +51,7 @@ export default class World {
                 }
             }
         });
+        */
 
         document.body.appendChild(this.canvas);
         this.ctx = this.canvas.getContext("2d")
@@ -138,9 +140,9 @@ export default class World {
         if (this._temp_showFTP) {
             this.ctx.font = "15px Arial";
             this.ctx.fillStyle = "rgba(0,0,0,1)";
-            this.ctx.fillRect(0, 0, 50, 25);
+            this.ctx.fillRect(20, 20, 50, 25);
             this.ctx.fillStyle = "white";
-            this.ctx.fillText(this.times.length.toString()+"fps", 7,16);
+            this.ctx.fillText(this.times.length.toString()+"fps", 27,36);
         }
     }
 }
